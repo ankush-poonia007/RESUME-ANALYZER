@@ -1,27 +1,19 @@
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
-.eggs/
-build/
-dist/
-.venv/
-venv/
+# ==============================================================================
+# .GITIGNORE - Resume Analyzer & JD Matcher Version Control Safeguards
+# Capstone Project Repository Strategy
+# ==============================================================================
 
-# Secrets & env
-.env
+# --- Python Runtime & Bytecode Caches ---
+__pycache__/                      # Python compiled source file cache directories
+*.py[cod]                        # Individual compiled bytecodes (.pyc, .pyd)
 
-# Vector store artifacts (rebuild with `make ingest`)
-data/vectorstore/
+# --- Isolated Development Environments ---
+.venv/                           # Primary local application virtual environment
+venv/                            # Alternative local virtual environment directory
 
-# Tooling caches
-.pytest_cache/
-.ruff_cache/
-.mypy_cache/
-.coverage
-htmlcov/
+# --- Secure Credentials & Configuration ---
+.env                             # Local private workspace secrets (GROQ_API_KEY)
 
-# Editors / OS
-.vscode/
-.idea/
-.DS_Store
+# --- IDE Profiles & Operating System Files ---
+.vscode/                         # Visual Studio Code workspace settings configurations
+.DS_Store                        # Apple macOS background system files
