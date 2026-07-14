@@ -1,7 +1,21 @@
-streamlit
-python-dotenv
-langchain-core
-langchain-community
-langchain-groq
-pypdf
-pydantic
+# ==============================================================================
+# REQUIREMENTS.TXT - Resume Analyzer & JD Matcher Ecosystem
+# Capstone Project Dependency Specification
+# ==============================================================================
+
+# Core Application Framework & Environment Management
+streamlit>=1.35.0                 # Interactive web dashboard interface UI
+python-dotenv>=1.0.1             # Secure handling of local .env file variables
+
+# Artificial Intelligence & LLM Orchestration (LangChain Ecosystem)
+langchain-core>=0.2.0            # Core abstraction models and chat prompt templates
+langchain-community>=0.2.0       # Base third-party component integrations layer
+langchain-groq>=0.1.4            # Specialized ChatGroq interface client bindings
+
+# Unstructured Data Parsing & Runtime Validation
+pypdf>=4.2.0                     # Lightning-fast in-memory PDF stream text extraction
+pydantic>=2.7.0                  # Data parsing definitions and strict JSON validations
+
+# ==============================================================================
+# Deployment Note: Run 'pip install -r requirements.txt' inside your isolated .venv
+# ==============================================================================
