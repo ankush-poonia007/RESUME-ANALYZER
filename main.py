@@ -225,50 +225,69 @@ if st.session_state.resume:
 
     col1, col2 = st.columns(2, gap="large")
 
-    # ---- Left column: identity + skills ----
+        # ---- Left column: identity + skills ----
     with col1:
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("**👤 Candidate**")
-        st.write(f"**Name:** {resume.name}")
-        st.write(f"**Email:** {resume.email}")
-        st.write(f"**Phone:** {resume.phone_number}")
-        st.markdown("</div>", unsafe_allow_html=True)
+        # Open, populate, and close the candidate container in ONE single markdown block
+        candidate_html = f"""
+        <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 1rem;">
+            <p style="margin-top:0; font-weight:bold; color:#1d4ed8;">👤 Candidate</p>
+            <p style="margin-bottom:0.4rem;"><strong>Name:</strong> {resume.name}</p>
+            <p style="margin-bottom:0.4rem;"><strong>Email:</strong> {resume.email}</p>
+            <p style="margin-bottom:0;"><strong>Phone:</strong> {resume.phone_number}</p>
+        </div>
+        """
+        st.markdown(candidate_html, unsafe_allow_html=True)
 
         if resume.skills:
-            st.markdown('<div class="card">', unsafe_allow_html=True)
-            st.markdown("**🛠 Skills**")
-            # Render each skill as a pill badge
-            pills_html = "".join(
-                f'<span class="pill">{s}</span>' for s in resume.skills
-            )
-            st.markdown(pills_html, unsafe_allow_html=True)
-            st.markdown("</div>", unsafe_allow_html=True)
+            # Generate the pills first, then wrap them in a single structural container string
+            pills_html = "".join(f'<span class="pill">{s}</span>' for s in resume.skills)
+            skills_html = f"""
+            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 1rem;">
+                <p style="margin-top:0; font-weight:bold; color:#1d4ed8; margin-bottom:0.6rem;">🛠 Skills</p>
+                <div>{pills_html}</div>
+            </div>
+            """
+            st.markdown(skills_html, unsafe_allow_html=True)
 
-    # ---- Right column: education + experience ----
+
+        # ---- Right column: education + experience ----
     with col2:
         if resume.education:
-            st.markdown('<div class="card">', unsafe_allow_html=True)
-            st.markdown("**🎓 Education**")
+            # Generate the education list items inside a string loop
+            edu_items_html = ""
             for edu in resume.education:
-                gpa_str = f" &nbsp;·&nbsp; GPA {edu.gpa}" if edu.gpa is not None else ""
-                st.markdown(
-                    f"**{edu.degree}**  \n{edu.university_name}{gpa_str}"
-                )
-            st.markdown("</div>", unsafe_allow_html=True)
+                gpa_str = f" — GPA: {edu.gpa}" if edu.gpa is not None else ""
+                edu_items_html += f"<li style='margin-bottom:0.5rem; color: #f8fafc;'><strong>{edu.degree}</strong><br><span style='color:#94a3b8;'>{edu.university_name}{gpa_str}</span></li>"
+            
+            education_html = f"""
+            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 1rem;">
+                <p style="margin-top:0; font-weight:bold; color:#1d4ed8; margin-bottom: 0.6rem;">🎓 Education</p>
+                <ul style="margin:0; padding-left:1.2rem; color: #f8fafc;">{edu_items_html}</ul>
+            </div>
+            """
+            st.markdown(education_html, unsafe_allow_html=True)
 
         if resume.experience:
-            st.markdown('<div class="card">', unsafe_allow_html=True)
-            st.markdown("**💼 Experience**")
+            # Generate the experience list items inside a string loop
+            exp_items_html = ""
             for exp in resume.experience:
-                duration = f"({exp.years})" if exp.years else ""
-                st.markdown(f"**{exp.company_name or 'N/A'}** {duration}")
-                if exp.project_name:
-                    st.markdown(f"&nbsp;&nbsp;📁 *{exp.project_name}*")
-                if exp.tech_stack:
-                    st.markdown(f"&nbsp;&nbsp;🔧 {exp.tech_stack}")
-                if exp.project_description:
-                    st.caption(exp.project_description)
-            st.markdown("</div>", unsafe_allow_html=True)
+                company = exp.company_name if exp.company_name else "Independent"
+                duration = f" ({exp.years})" if exp.years else ""
+                
+                project_block = f"<br><strong style='font-size:0.85rem; color:#d97706;'>🚀 Project: {exp.project_name}</strong>" if exp.project_name else ""
+                tech_block = f"<br><span style='font-size:0.8rem; color:#94a3b8;'>Tech Stack: {exp.tech_stack}</span>" if exp.tech_stack else ""
+                desc_block = f"<br><span style='font-size:0.85rem; font-style:italic; color: #cbd5e1;'>{exp.project_description}</span>" if exp.project_description else ""
+                
+                exp_items_html += f"<li style='margin-bottom:1rem; color: #f8fafc;'><strong>{company}</strong>{duration}{project_block}{tech_block}{desc_block}</li>"
+            
+            experience_html = f"""
+            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 1rem;">
+                <p style="margin-top:0; font-weight:bold; color:#1d4ed8; margin-bottom: 0.6rem;">💼 Experience</p>
+                <ul style="margin:0; padding-left:1.2rem; color: #f8fafc;">{exp_items_html}</ul>
+            </div>
+            """
+            st.markdown(experience_html, unsafe_allow_html=True)
+
 
     # ---- Projects (full width) ----
     if resume.projects:
