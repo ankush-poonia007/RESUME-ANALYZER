@@ -7,11 +7,10 @@ load_dotenv()
 
 def get_llm( model_name:str = "llama-3.3-70b-versatile", temperature:float = 0 ) -> ChatGroq:
     
-    client = ChatGroq(api_key=os.getenv("GROQ_API_KEY"),model=model_name, temperature=temperature)
-    if not client:
-        raise "ERROR: No api key!!"
+    if not os.getenv("GROQ_API_KEY"):
+        raise ""
     
-    return client
+    return ChatGroq(model=model_name, temperature=temperature)
 
 def load_resume_text_from_path(pdf_path: str) -> str:
 
