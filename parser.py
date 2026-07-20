@@ -1,9 +1,11 @@
 import os
 from dotenv import load_dotenv
-from langchain_groq import ChatGroq
-from models import Resume
 from pypdf import PdfReader
+
+from models import Resume
 from prompts import resume_prompt
+
+from langchain_groq import ChatGroq
 
 load_dotenv()
 
@@ -48,6 +50,9 @@ def load_resume_text_from_bytes(file: bytes) -> str:
 
 def parse_resume(resume_text: str, llm: ChatGroq) -> Resume:
     """Invokes the structured extraction logic to turn raw text into a Resume object."""
+    
+    llm = llm if llm is not None else get_llm()
+    
     client = llm.with_structured_output(Resume, method="function_calling")
     chain = resume_prompt | client
 
